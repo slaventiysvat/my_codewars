@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <intrin.h>
+#include "simple_train_functions.h"
 //Description about all situation
 //Some simple functions which i made on Codewars platform.
 //Here you can find some solutions on Codewars tasks. Levels 8ku, 7ku, 6ku, 5ku.
