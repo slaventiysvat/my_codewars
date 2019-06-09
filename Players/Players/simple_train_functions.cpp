@@ -7,6 +7,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <math.h>
+#include <intrin.h>
 //Description about all situation
 //Some simple functions which i made on Codewars platform.
 //Here you can find some solutions on Codewars tasks. Levels 8ku, 7ku, 6ku, 5ku.
@@ -816,4 +817,95 @@ char** inArray(const char* arr1[], int sz1, const char* arr2[], int sz2, int* lg
 	free(f_of_idx);
 	*lg = len_new_str;
 	return rez_array;
+}
+
+/*****************************************************************************
+  functionname: get_free_bits
+
+  description: analizing value on free bits
+
+  input:pointer for output value (result) and input num,
+
+  output:
+  result value
+*****************************************************************************/
+int get_free_bits(long value) {
+	unsigned long result = 0;
+	unsigned char err;
+	err = _BitScanReverse(&result, value);
+	if (err) {
+		return 31 - result;
+	}
+	else {
+		return 32;
+	}
+}
+/*****************************************************************************
+
+
+/*****************************************************************************
+  functionname: add_shift_division
+
+  description: Restoring division using shift and adding
+
+  input: dividend and divisor (num,denum)
+  value alvays positive!
+  output:
+  division result
+*****************************************************************************/
+int add_shift_division(int num, int denum) {
+
+	int maxvalue = 0x7FFFFFFF;
+
+	if (num == denum) {
+
+		return  maxvalue;
+
+	}
+
+	int k1 = 31 + 8;
+	int shift1 = get_free_bits(num);
+	long long int Remainder = (long long int)num;
+	Remainder = Remainder << shift1 - 1;  //normalithation
+	Remainder = Remainder << 8;
+	long long int Divisor = denum;
+
+	int shift2 = get_free_bits(denum);
+	Divisor = Divisor << shift2 - 1;
+	Divisor = Divisor << 8;
+	long long int Quotient = 0x0;
+
+	while (k1 > 0) {
+		/*Subtract the Divisor
+		register from the Remainder
+		register and place them result
+		in the Remainder register*/
+		Remainder = Remainder - Divisor;
+		// Test Remainder
+		if (Remainder >= 0) {
+			/*Shift the Quotient register
+			to the left, setting the
+			new rightmost bit to 1;*/
+			Quotient = Quotient + 0x00000001;
+		}
+
+		if (Remainder < 0) {
+			/*Restore the original value by adding
+			the Divisor register to the Remainder register
+			and place the sum in the Remainder register.
+			Also shift the Quotient register to the left,
+			setting the new least significant bit to 0.*/
+			Remainder = Remainder + Divisor;
+			Quotient = Quotient + 0x00000000;
+		}
+		Quotient = Quotient << 1;
+		// Shift the Divisor register right 1 bit
+
+		Divisor = Divisor >> 1;
+		k1 = k1 - 1;
+	}
+	shift1 = shift1 - shift2;
+	Quotient = Quotient >> shift1 + 8;
+
+	return Quotient;
 }
