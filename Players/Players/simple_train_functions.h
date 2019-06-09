@@ -1,0 +1,11 @@
+#ifndef SIMPLE_TRAIN_FUNCTION
+#define SIMPLE_TRAIN_FUNCTION
+
+
+
+
+
+
+
+#endif // !SIMPLE_TRAIN_FUNCTION
+

@@ -1,3 +1,8 @@
+#my settings
+.vs/
+Players/Players/Debug/
+Debug/
+
 # Prerequisites
 *.d
 
@@ -51,7 +56,3 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-#my settings
-*.vs/
-*.Players/Debug/
-*.Debug/
