@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="test.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="..\solved_tasks\simple_train_functions.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\solved_tasks\linked_list.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="sources">
+      <UniqueIdentifier>{844f0847-2861-4e24-b1bb-120ec5f90567}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
