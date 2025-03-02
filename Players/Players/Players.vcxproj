@@ -115,10 +115,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <ClCompile Include="linked_list.cpp" />
+>>>>>>> da7f5cbda0827d633e22a638ef0631665408eb61
     <ClCompile Include="palyers.cpp" />
     <ClCompile Include="simple_train_functions.cpp" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <ClInclude Include="linked_list.h" />
+>>>>>>> da7f5cbda0827d633e22a638ef0631665408eb61
     <ClInclude Include="simple_train_functions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
