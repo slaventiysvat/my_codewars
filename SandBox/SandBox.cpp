@@ -1,11 +1,28 @@
 // SandBox.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+//#if _MSVC_LANG >= 202002L
+//#define CPP_VERSION "C++20"
+//#elif _MSVC_LANG >= 201703L
+//#define CPP_VERSION "C++17"
+//#elif _MSVC_LANG >= 201402L
+//#define CPP_VERSION "C++14"
+//#else
+//#define CPP_VERSION "C++11 or earlier"
+//#endif
 
 #include <iostream>
 #include <bitset>
 #include <iomanip> 
 #include <string> 
 #include <cstddef>
+#include <cstdint>
+#if _MSVC_LANG >= 202002L // C++20
+    #include <bit>
+#endif
+#include <type_traits> // For std::enable_if and std::is_unsigned
+
+
+
 
 const unsigned int redBitsMsk = 0xFF000000; 
 const unsigned int greenBitsMsk = 0x00FF0000;
@@ -14,8 +31,48 @@ const unsigned int alphaBitsMsk = 0x000000FF;
 
 int show_colorRGBA(std::bitset<32>& valToShow);
 
+// Circular shift function
+template <typename T>
+//typename std::enable_if<std::is_unsigned<T>::_v, T>::_t circularShift(T value, int shift, bool leftShift = true) {
+typename std::enable_if<std::is_unsigned<T>::value, T>::type circularShift(T value, int shift, bool leftShift = true) {
+    constexpr int bitSize = sizeof(T) * 8; // Number of bits in the type
+
+    // Normalize the shift value to avoid unnecessary rotations
+    shift %= bitSize;
+    if (shift < 0) shift += bitSize; // Handle negative shifts
+
+#if _MSVC_LANG >= 202002L // C++20
+    if (leftShift) {
+        return std::rotl(value, shift); // Use std::rotl for left rotation
+    }
+    else {
+        return std::rotr(value, shift); // Use std::rotr for right rotation
+    }
+#elif _MSVC_LANG >= 201703L // C++17
+    if (leftShift) {
+        return (value << shift) | (value >> (bitSize - shift)); // Manual left rotation
+    }
+    else {
+        return (value >> shift) | (value << (bitSize - shift)); // Manual right rotation
+    }
+#elif _MSVC_LANG >= 201103L // C++11 or C++14
+    // Same as C++17, since C++11 and C++14 don't have `std::rotl` or `std::rotr`
+    if (leftShift) {
+        return (value << shift) | (value >> (bitSize - shift)); // Manual left rotation
+    }
+    else {
+        return (value >> shift) | (value << (bitSize - shift)); // Manual right rotation
+    }
+#else
+    #error "This function requires at least C++11."
+    //#error This function requires at least C++11.
+#endif
+}
+
 int main()
 {
+    std::cout << "_MSVC_LANG: " << _MSVC_LANG << std::endl;
+
     std::bitset<32> colorRGBA(static_cast<unsigned long>(redBitsMsk | greenBitsMsk | blueBitsMsk | alphaBitsMsk));
 
     std::bitset<8> redBits;
@@ -40,6 +97,20 @@ int main()
     colorRGBA.reset(position_t(6));
 
     std::cout << "The Resetted Value of Bits is = 0x" << show_colorRGBA(colorRGBA) << std::endl;
+
+
+    unsigned int value = 0b10110011101100111011001110110011; // Example value
+    int shift = 3;                  // Number of positions to shift
+
+    //// Circular left shift
+    unsigned int leftShifted = circularShift(value, shift, true);
+    std::cout << "Original: " << std::bitset<32>(value) << std::endl;
+    std::cout << "Left Shifted: " << std::bitset<32>(leftShifted) << std::endl;
+
+    // Circular right shift
+    unsigned int rightShifted = circularShift(value, shift, false);
+    std::cout << "Right Shifted: " << std::bitset<32>(rightShifted) << std::endl;
+
 
 	return 0;
 
